@@ -12,7 +12,9 @@ from navertools import News
 
 @pytest.fixture
 def instance():
-    return News()
+    return News({
+        'keyword': 'test'
+    })
 
 def test_press():
     """ Testing for get_press
