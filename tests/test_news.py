@@ -20,22 +20,25 @@ def test_press():
     """ Testing for get_press
     """
     news = instance()
-    for press in news.get_press():
+    for press in News.get_press():
         assert isinstance(press, str)
+        news.press = press
 
-    for press in news.get_press(label=False):
+    for press in News.get_press(label=False):
         assert isinstance(press, str)
 
 def test_category():
     """ Testing for get_category
     """
     news = instance()
-    for major, minors in news.get_category():
+    for major, minors in News.get_category():
         assert isinstance(major, str)
+        news.category = major
         for minor in minors:
             assert isinstance(minor, str)
+            news.category = minor
 
-    for major, minors in news.get_category(label=False):
+    for major, minors in News.get_category(label=False):
         assert isinstance(major, str)
         for minor in minors:
             assert isinstance(minor, str)
