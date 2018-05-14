@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 from pythond import __version__
 setup(
-    name             = 'navernews',
+    name             = 'navertools',
     version          = __version__,
-    description      = 'Naver News crawling utility',
+    description      = 'Naver tools for python',
     author           = 'Maydev',
     author_email     = 'alice.maydev@gmail.com',
-    url              = 'https://github.com/MaybeS/navernews',
-    download_url     = 'https://githur.com/MaybeS/navernews/archive/1.0.tar.gz',
+    url              = 'https://github.com/MaybeS/navertools',
+    download_url     = 'https://githur.com/MaybeS/navertools/archive/1.0.tar.gz',
     install_requires = [ ],
     license          = 'LGPL',
     packages         = find_packages(exclude = ['docs', 'tests*']),
-    keywords         = ['naver', 'news', 'crawler'],
+    keywords         = ['naver', 'tools', 'news'],
     package_data     = {},
     zip_safe         = False,
     classifiers      = [

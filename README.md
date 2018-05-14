@@ -1,15 +1,13 @@
-# navernews
-[![Pypi](https://img.shields.io/pypi/v/navernews.svg)](https://pypi.python.org/pypi/navernews)
-[![Python Versions](https://img.shields.io/pypi/pyversions/navernews.svg)](https://pypi.python.org/pypi/navernews)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# navertools
 
-Naver News crawling utility
+Naver tools for python
 
 ## Usage
 
 ```
-from navernews import News as NN
+import navertools
 
-for news in NN.crawl('keyword'):
-    print (news.text)
+for news in navertools.news('2018-05-14', '2018-05-20'):
+    for comment in news.comments():
+        print (comment.text)
 ```
