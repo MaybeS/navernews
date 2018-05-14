@@ -1,45 +1,74 @@
 from typing import Generator, Tuple, List
+from itertools import chain
 
 from .config import CONFIG
 from ..lib.connections import request
-from ..lib.utility import get_context
+from ..lib.utility import get_context, assert_date, flatten
 
 class News:
     """ Naver News class
     """
+
     __press_url = 'http://news.naver.com/main/ajax/bottomIndex/press.nhn'
     __cate_url = 'http://news.naver.com/main/ajax/bottomIndex/category.nhn'
-    __url = 'https://search.naver.com/search.naver?where=news&query={keyword}&nso={date}&field={target}'
+    __url = 'http://news.naver.com/main/list.nhn?sid1={cate1}&sid2={cate2}&page={page}&oid={press}&date={date}'
+
+    __press = None
+    __cate = None
 
     def __init__(self, config=None):
         self.config = CONFIG.copy()
         if config: self.config.update(config)
 
-        assert self.config['keyword'], 'Set keyword!'
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.assert_iter(): raise StopIteration
+        try:
+            return self.current
+        finally:
+            self.current += 1
 
     @property
-    def keyword(self):
-        return self.config['keyword']
+    def date(self):
+        return self.config['date_from'], self.config['date_to']
+
+    @date.setter
+    def date(self, date):
+        assert all(map(assert_date, date)), 'Date format must be 0000-00-00'
+        self.config['date_from'], self.config['date_to'] = date
 
     @property
-    def date_from(self):
-        return self.config['date_from']
+    def _press(self):
+        News.__press = News.__press or list(News.get_press())
+        return News.__press
 
     @property
-    def date_to(self):
-        return self.config['date_to']
+    def press(self):
+        return self.config['press']
+
+    @press.setter
+    def press(self, press):
+        assert press in self._press or not press, 'Invalid press'
+        self.config['press'] = press
 
     @property
-    def target(self):
-        return self.config['target']
+    def _category(self):
+        News.__cate = News.__cate or list(News.get_category())
+        return News.__cate
 
-    @target.setter
-    def target(self, tar):
-        assert tar in ['all', 'title'], 'Must be all or title'
-        self.config['target'] = tar == 'title'
+    @property
+    def category(self):
+        return self.config['cate']
+
+    @category.setter
+    def category(self, cate):
+        assert cate in flatten(self._category) or not cate, 'Invalide category'
+        self.config['cate'] = cate
 
     def wrapper(self) -> str:
-        return __url.format(**self.config)
+        return News.__url.format(**self.config)
 
     @staticmethod
     def get_press(label: bool = True) -> Generator[str, None, None]:
